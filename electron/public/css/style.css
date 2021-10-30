@@ -1,0 +1,8 @@
+.link-focus:hover{
+    color:rgb(115, 206, 206);
+    cursor: pointer;
+}
+
+.tilesetImgContent:hover{
+    cursor: pointer;
+}
