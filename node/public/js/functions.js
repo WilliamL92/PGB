@@ -12,6 +12,7 @@ let canvasType = "none"
 
 let tilesetDrag = "none"
 
+let tilesetIndex = 0
 Array.prototype.findValueInTab = function(value){
     let res = -1
     for(let i = 0; i < this.valueOf().length; i++){
@@ -73,7 +74,8 @@ function getTileSet(image, func){
             const _index = arr.length - 1
             for(let n = 0; n < _lengthWidth; n++){
                 const dataURL = _stage.toDataURL()
-                arr[_index].push(dataURL)
+                tilesetIndex++
+                arr[_index].push({image: dataURL, id: tilesetIndex})
                 _tile.x(_tile.x() - tileWidth)
                 _layer.draw()
             }
@@ -119,7 +121,7 @@ function combineTileset(tab, func){
                 }
 
             }
-            imageObj.src = tab[p][n]
+            imageObj.src = tab[p][n].image
         }
     }
 }
