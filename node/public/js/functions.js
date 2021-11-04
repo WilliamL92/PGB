@@ -6,8 +6,6 @@ let projectData = {
     sceneObject: {tab:[], currentId: 0},
 }
 
-let spritesSelected = []
-
 let canvasType = "none"
 
 let tilesetDrag = "none"
@@ -204,4 +202,57 @@ function gridCoord(data){
         })
     }
     return tab
+}
+
+function generateSelectedTab(first, second){
+    if(first > second){
+        const _t = first
+        first = second
+        second = _t
+    }
+    let newTab = []
+    let _index1 = 0
+    let _index2 = 0
+    for(let o = 0; o < projectData.libraryMedia.tab.length; o++){
+        const _file = projectData.libraryMedia.tab[o].data
+        if(first >= projectData.libraryMedia.tab[o].firstIndex && first <= projectData.libraryMedia.tab[o].secondIndex){
+            for(let y = 0; y < _file.length; y++){
+                for(let p = 0; p < _file[y].length; p++){
+                    if(_file[y][p].id == first){
+                        _index1 = p
+                    }
+                    if(_file[y][p].id == second){
+                        _index2 = p
+                        if(_index1 > _index2){
+                            const _t = _index1
+                            _index1 = _index2
+                            _index2 = _t
+
+                            first = first - (_index2 - _index1)
+                            second = second - (_index1 - _index2)
+                        }
+                    }
+                }
+            }
+        }
+        let _tIndex = 0
+        let firstI = 0
+        for(let y = 0; y < _file.length; y++){
+            for(let p = 0; p < _file[y].length; p++){
+                if(p >= _index1 && p <= _index2){
+                    if(_file[y][p].id >= first && _file[y][p].id <= second){
+                        if(_file[y][p].id == first){
+                            firstI = y
+                        }
+                        _tIndex = y - firstI
+                        if(typeof(newTab[_tIndex]) == "undefined"){
+                            newTab.push([])
+                        }
+                        newTab[_tIndex].push({id: _file[y][p].id, image: _file[y][p].image})  
+                    }
+                }                
+            }
+        }
+    }
+    return newTab
 }

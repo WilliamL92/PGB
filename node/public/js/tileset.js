@@ -11,13 +11,16 @@ function loadTileset(tab){
                 $('.tilesetImgContent').off('mousedown')
                 $('.tilesetImgContent').off('mouseup')
 
+                let firstIndex = 0
+                let secondIndex = 0
+                let imgTab = [[]]
+
                 $('.tilesetImgContent').on('mouseenter', (e)=>{
                     let _elem = $(e.target)
                     if(_elem.get(0).tagName != "DIV"){
                         _elem = $(e.target).parent()
                     }
                     $(`#${_elem.attr('id')}`).children().css('opacity', 0.4)
-                    // spritesSelected.push($(_elem).children().attr('src'))
                 })
 
                 $('.tilesetImgContent').on('mouseleave', (e)=>{
@@ -25,48 +28,35 @@ function loadTileset(tab){
                     if(_elem.get(0).tagName != "DIV"){
                         _elem = $(e.target).parent()
                     }
-                    if(tilesetDrag != "multiple"){
+                    if(tilesetDrag == "multiple"){
+                        
+                    }
+                    else if(tilesetDrag == "none"){
                         $(`#${_elem.attr('id')}`).children().css('opacity', 1)
                     }
-                    else{
-                        const _index = spritesSelected.findValueInTab($(`#${_elem.attr('id')}`).children().attr('src'))
-                        spritesSelected.splice(_index, 1)
-                        addImg()
-                    }
                 })
-
-                $('.tilesetImgContent').on('click', (e)=>{
-                    $('#tilesetContent').children().find('img').css('opacity', 1)
+                let mouseIsDown = false
+                $('.tilesetImgContent').on('mousedown', (e)=>{
                     let _elem = $(e.target)
                     if(_elem.get(0).tagName != "DIV"){
                         _elem = $(e.target).parent()
                     }
-                    $(`#${_elem.attr('id')}`).children().css('opacity', 0.4)
-                    spritesSelected = []
-                    spritesSelected.push($(e.target).attr('src'))
-                    tilesetDrag = "none"
-                    addImg()
-                })
-                $('.tilesetImgContent').on('mousedown', (e)=>{
-                    if(tilesetDrag == "multiple"){
-                        tilesetDrag = "none"
-                    }
-                    else if(tilesetDrag == "none"){
-                        tilesetDrag = "multiple"
-                    }
-                    addImg()
+                    tilesetDrag = "multiple"
+                    firstIndex = _elem.attr('id').substring(14, _elem.attr('id').length)
+                    mouseIsDown = true
                 })
 
                 $('.tilesetImgContent').on('mouseup', (e)=>{
-                    if(tilesetDrag == "multiple"){
-                        tilesetDrag = "none"
+                    let _elem = $(e.target)
+                    if(_elem.get(0).tagName != "DIV"){
+                        _elem = $(e.target).parent()
                     }
-                    else if(tilesetDrag == "none"){
-                        tilesetDrag = "multiple"
-                    }
-                    
+                    tilesetDrag = "none"
+                    secondIndex = _elem.attr('id').substring(14, _elem.attr('id').length)
+                    mouseIsDown = false
+                    imgTab = generateSelectedTab(firstIndex, secondIndex)
+                    addImg(imgTab)
                 })
-
             }
         }
         $('#tilesetContent').append('</div>')
